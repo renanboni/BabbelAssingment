@@ -1,7 +1,8 @@
-package com.example.babbelassignment
+package com.example.babbelassignment.features
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.babbelassignment.R
 
 class MainActivity : AppCompatActivity() {
 
