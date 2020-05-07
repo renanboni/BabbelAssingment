@@ -21,7 +21,7 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(context: Context): SharedPreferences? {
+    fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("BabbelAssignment", Context.MODE_PRIVATE)
     }
 
