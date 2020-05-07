@@ -5,8 +5,11 @@ import com.example.babbelassignment.core.ext.readFile
 import com.example.babbelassignment.data.dto.WordDto
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import javax.inject.Inject
 
-class WordReader(private val context: Context) : FileReader<List<WordDto>> {
+class WordReader @Inject constructor(
+    private val context: Context
+) : FileReader<List<WordDto>> {
 
     companion object {
         private const val FILE_NAME = "words_v2.json"

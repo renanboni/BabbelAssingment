@@ -74,6 +74,9 @@ dependencies {
     // Gson
     implementation "com.google.code.gson:gson:$gsonVersion"
 
+    // Serializaion
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
     // Testing
     testImplementation "junit:junit:$jUnitVersion"
     androidTestImplementation "androidx.test.ext:junit:$jUnitExtVersion"

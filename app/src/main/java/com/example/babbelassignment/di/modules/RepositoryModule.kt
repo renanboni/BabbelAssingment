@@ -34,8 +34,8 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideWordsRepository(
-        fileReader: FileReader<List<WordDto>>,
-        mapper: WordsRemoteMapper<WordDto, Word>
+        fileReader: WordReader,
+        mapper: WordsRemoteMapperImpl
     ): WordsRepository {
         return WordsRepositoryImpl(
             fileReader,

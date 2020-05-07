@@ -5,6 +5,6 @@ import com.example.babbelassignment.domain.entity.Word
 
 class WordsRemoteMapperImpl : WordsRemoteMapper<WordDto, Word> {
     override fun mapFromDto(dto: WordDto): Word {
-        return Word(english = dto.english, spanish = dto.spanish)
+        return Word(english = dto.english.orEmpty(), spanish = dto.spanish.orEmpty())
     }
 }
