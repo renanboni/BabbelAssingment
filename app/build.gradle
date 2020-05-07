@@ -36,13 +36,18 @@ def jUnitExtVersion = "1.1.1"
 def rxKotlinVersion = "2.4.0"
 def rxJavaVersion = "2.1.1"
 def daggerVersion = "2.23.2"
+def gsonVersion = "2.8.6"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Layout
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+
+    // Ktx
+    implementation "androidx.core:core-ktx:$ktxVersion"
 
     // Rx
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
@@ -61,6 +66,9 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     // Testing
     testImplementation "junit:junit:$jUnitVersion"
