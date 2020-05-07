@@ -1,0 +1,2 @@
+rootProject.name='BabbelAssignment'
+include ':app'
