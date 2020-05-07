@@ -1,7 +1,13 @@
 package com.example.babbelassignment
 
-import android.app.Application
+import com.example.babbelassignment.di.components.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class BabbelApp: Application() {
-
+class BabbelApp: DaggerApplication() {
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent
+            .factory()
+            .create(this)
+    }
 }

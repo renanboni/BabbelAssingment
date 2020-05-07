@@ -6,8 +6,9 @@ import com.example.babbelassignment.data.mapper.WordsRemoteMapper
 import com.example.babbelassignment.domain.entity.Word
 import com.example.babbelassignment.domain.repository.WordsRepository
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class WordsRepositoryImpl(
+class WordsRepositoryImpl @Inject constructor(
     private val fileReader: FileReader<List<WordDto>>,
     private val mapper: WordsRemoteMapper<WordDto, Word>
 ) : WordsRepository {
