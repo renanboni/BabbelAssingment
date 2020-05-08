@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.babbelassignment.BabbelApp
 import com.example.babbelassignment.di.modules.AppModule
 import com.example.babbelassignment.di.modules.GameModule
-import com.example.babbelassignment.di.modules.HomeModule
 import com.example.babbelassignment.di.modules.RepositoryModule
 import dagger.BindsInstance
 import dagger.Component
@@ -18,7 +17,6 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         RepositoryModule::class,
-        HomeModule::class,
         GameModule::class
     ]
 )
