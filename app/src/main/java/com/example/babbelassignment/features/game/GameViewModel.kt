@@ -20,7 +20,7 @@ class GameViewModel @Inject constructor(
     private val getHighScoreUseCase: GetHighScore
 ) : BaseViewModel() {
 
-    private var currentScore = 0
+    internal var currentScore = 0
 
     private val wordState = MutableLiveData<Word>()
     val wordStateView: LiveData<Word> = wordState
@@ -60,13 +60,14 @@ class GameViewModel @Inject constructor(
         disposable.add(getWordsUseCase()
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { loadingState.value = true }
-            .doOnComplete { loadingState.value = false }
             .subscribe({
+                loadingState.value = false
                 wordManager.words = it.toMutableList()
                 scoreState.value = currentScore.toString()
                 gameState.value = GameState.Started
                 getNextWord()
             }, {
+                loadingState.value = false
                 errorState.value = Unit
             })
         )

@@ -1,27 +1,26 @@
 package com.example.babbelassignment.domain
 
 import com.example.babbelassignment.domain.entity.Word
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
-import kotlin.random.Random
 
-class WordManager @Inject constructor() {
-
+class WordManager @Inject constructor(
+    private val randomAnswer: RandomAnswer
+) {
     var words = mutableListOf<Word>()
 
-    private lateinit var currentWord: Word
-    private var currentIndex = 0
+    internal lateinit var currentWord: Word
 
-    private var isCorrect = false
+    internal var currentIndex = 0
+
+    internal var isCorrect = false
 
     fun hasNext() = currentIndex < words.size
 
     fun nextWord(): Word {
         currentWord = words[currentIndex]
 
-        return if (shouldGetWrongAnswer()) {
-            val random = Random.nextInt(currentIndex, words.count())
+        return if (randomAnswer.shouldGetWrongAnswer()) {
+            val random = randomAnswer.generateRandomIndex(currentIndex, words.count())
 
             if (random == currentIndex) {
                 isCorrect = true
@@ -45,9 +44,5 @@ class WordManager @Inject constructor() {
 
     fun isCorrectWord(): Boolean {
         return isCorrect
-    }
-
-    private fun shouldGetWrongAnswer(): Boolean {
-        return Random.nextBoolean()
     }
 }

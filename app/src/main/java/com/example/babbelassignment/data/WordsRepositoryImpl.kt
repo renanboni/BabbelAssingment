@@ -14,6 +14,6 @@ class WordsRepositoryImpl @Inject constructor(
 ) : WordsRepository {
 
     override fun getWords(): Observable<List<Word>> {
-        return Observable.just(fileReader.readFromAssets().map { mapper.mapFromDto(it) })
+        return fileReader.readFromAssets().map { it.map { dto -> mapper.mapFromDto(dto) } }
     }
 }
