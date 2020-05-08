@@ -3,20 +3,22 @@ package com.example.babbelassignment.features.game
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.babbelassignment.core.base.BaseViewModel
 import com.example.babbelassignment.domain.WordManager
 import com.example.babbelassignment.domain.entity.Word
+import com.example.babbelassignment.domain.usecases.GetHighScore
 import com.example.babbelassignment.domain.usecases.GetWords
 import com.example.babbelassignment.domain.usecases.SaveHighScore
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
     private val getWordsUseCase: GetWords,
     private val wordManager: WordManager,
-    private val saveHighScore: SaveHighScore
-) : ViewModel() {
-
-    private val disposable = CompositeDisposable()
+    private val saveHighScore: SaveHighScore,
+    private val getHighScoreUseCase: GetHighScore
+) : BaseViewModel() {
 
     private var currentScore = 0
 
@@ -26,11 +28,8 @@ class GameViewModel @Inject constructor(
     private val scoreState = MutableLiveData<String>()
     val scoreViewState: LiveData<String> = scoreState
 
-    private val loadingState = MutableLiveData<Boolean>()
-    val loadingViewState: LiveData<Boolean> = loadingState
-
-    private val errorState = MutableLiveData<Unit>()
-    val errorViewState: LiveData<Unit> = errorState
+    private val highScoreState = MutableLiveData<String>()
+    val highScoreViewState: LiveData<String> = highScoreState
 
     private val gameState = MutableLiveData<GameState>()
     val gameStateView: LiveData<GameState> = gameState
@@ -38,18 +37,33 @@ class GameViewModel @Inject constructor(
     private fun getNextWord() {
         if (wordManager.hasNext()) {
             wordState.value = wordManager.nextWord()
-        } else {
             saveHighScore(currentScore)
-            gameState.value = GameState.GameOver
+        } else {
+            gameState.value = GameState.GameOver(currentScore.toString())
+            saveHighScore(currentScore)
+            currentScore = 0
+            wordManager.reset()
+            disposable.clear()
         }
+    }
+
+    fun restart() {
+        getHighScore()
+        getWords()
+    }
+
+    fun getHighScore() {
+        highScoreState.value = getHighScoreUseCase().toString()
     }
 
     fun getWords() {
         disposable.add(getWordsUseCase()
+            .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { loadingState.value = true }
             .doOnComplete { loadingState.value = false }
-            .subscribe ({
+            .subscribe({
                 wordManager.words = it.toMutableList()
+                scoreState.value = currentScore.toString()
                 gameState.value = GameState.Started
                 getNextWord()
             }, {
@@ -60,9 +74,9 @@ class GameViewModel @Inject constructor(
 
     fun onCorrectClicked() {
         if (wordManager.isCorrectWord()) {
-            currentScore += 10
+            incrementScore()
         } else {
-            currentScore -= 10
+            decrementScore()
         }
 
         publishScore()
@@ -70,16 +84,16 @@ class GameViewModel @Inject constructor(
 
     fun onWrongClicked() {
         if (!wordManager.isCorrectWord()) {
-            currentScore += 10
+            incrementScore()
         } else {
-            currentScore -= 10
+            decrementScore()
         }
 
         publishScore()
     }
 
     fun onNoAnswer() {
-        currentScore -= 10
+        decrementScore()
         publishScore()
     }
 
@@ -88,8 +102,22 @@ class GameViewModel @Inject constructor(
         getNextWord()
     }
 
+    private fun incrementScore() {
+        currentScore += SCORE_VALUE
+    }
+
+    private fun decrementScore() {
+        if (currentScore > 0) {
+            currentScore -= SCORE_VALUE
+        }
+    }
+
+    companion object {
+        private const val SCORE_VALUE = 10
+    }
+
     sealed class GameState {
-        object Started: GameState()
-        object GameOver: GameState()
+        object Started : GameState()
+        data class GameOver(val finalScore: String) : GameState()
     }
 }

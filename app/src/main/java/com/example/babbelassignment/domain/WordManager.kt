@@ -22,8 +22,14 @@ class WordManager @Inject constructor() {
 
         return if (shouldGetWrongAnswer()) {
             val random = Random.nextInt(currentIndex, words.count())
-            currentWord.spanish = words[random].spanish
-            isCorrect = false
+
+            if (random == currentIndex) {
+                isCorrect = true
+            } else {
+                isCorrect = false
+                currentWord.spanish = words[random].spanish
+            }
+
             currentIndex++
             currentWord
         } else {
@@ -31,6 +37,10 @@ class WordManager @Inject constructor() {
             currentIndex++
             currentWord
         }
+    }
+
+    fun reset() {
+        currentIndex = 0
     }
 
     fun isCorrectWord(): Boolean {

@@ -12,59 +12,88 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/score"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/highscore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="High Score: 100" />
 
     <TextView
         android:id="@+id/english"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="House"
+        android:layout_marginTop="24dp"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="House" />
 
     <TextView
         android:id="@+id/spanish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Casa"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/english"
-        app:layout_constraintStart_toStartOf="@+id/english"
-        app:layout_constraintTop_toBottomOf="@+id/english" />
+        app:layout_constraintEnd_toEndOf="@id/english"
+        app:layout_constraintStart_toStartOf="@id/english"
+        app:layout_constraintTop_toBottomOf="@id/english"
+        tools:text="Casa" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/start_playing"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toTopOf="@id/clickToPlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
         android:id="@+id/correct"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/correct"
+        android:contentDescription="@string/right_word"
+        android:src="@drawable/ic_correct"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/wrong"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
         android:id="@+id/wrong"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/wrong"
+        android:contentDescription="@string/wrong_word"
+        android:src="@drawable/ic_wrong"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/correct" />
+
+    <TextView
+        android:id="@+id/clickToPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/click_to_play"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/start"
+        app:layout_constraintStart_toStartOf="@id/start"
+        app:layout_constraintTop_toBottomOf="@id/start" />
 
     <ProgressBar
         android:id="@+id/loading"
@@ -81,5 +110,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="correct, wrong, english, spanish" />
+        app:constraint_referenced_ids="correct, wrong, english, spanish, score" />
 </androidx.constraintlayout.widget.ConstraintLayout>

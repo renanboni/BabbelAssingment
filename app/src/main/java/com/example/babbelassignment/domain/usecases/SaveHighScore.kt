@@ -7,6 +7,10 @@ class SaveHighScore @Inject constructor(
     private val repository: ScoreRepository
 ) {
     operator fun invoke(score: Int) {
-        repository.setHighScore(score)
+        val currentHighScore = repository.getHighScore()
+
+        if (score > currentHighScore) {
+            repository.setHighScore(score)
+        }
     }
 }
