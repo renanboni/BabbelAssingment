@@ -43,7 +43,7 @@ class HomeFragment : DaggerFragment() {
         viewModel.highScoreViewState.observe(viewLifecycleOwner, Observer { renderHighScore(it) })
 
         start.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_gameFragment)
+            // findNavController().navigate(R.id.action_homeFragment_to_gameFragment)
         }
     }
 

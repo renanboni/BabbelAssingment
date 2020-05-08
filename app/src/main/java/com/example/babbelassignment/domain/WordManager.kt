@@ -8,10 +8,6 @@ import kotlin.random.Random
 
 class WordManager @Inject constructor() {
 
-    private var subject = PublishSubject.create<Word>()
-
-    var observable: Observable<Word> = subject
-
     var words = mutableListOf<Word>()
 
     private lateinit var currentWord: Word
@@ -21,20 +17,20 @@ class WordManager @Inject constructor() {
 
     fun hasNext() = currentIndex < words.size
 
-    fun nextWord() {
+    fun nextWord(): Word {
         currentWord = words[currentIndex]
 
-        if (shouldGetWrongAnswer()) {
+        return if (shouldGetWrongAnswer()) {
             val random = Random.nextInt(currentIndex, words.count())
             currentWord.spanish = words[random].spanish
             isCorrect = false
-            subject.onNext(currentWord)
+            currentIndex++
+            currentWord
         } else {
             isCorrect = true
-            subject.onNext(currentWord)
+            currentIndex++
+            currentWord
         }
-
-        currentIndex++
     }
 
     fun isCorrectWord(): Boolean {

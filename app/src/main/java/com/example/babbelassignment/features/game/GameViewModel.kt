@@ -26,26 +26,36 @@ class GameViewModel @Inject constructor(
     private val scoreState = MutableLiveData<String>()
     val scoreViewState: LiveData<String> = scoreState
 
-    init {
-        getWords()
-    }
+    private val loadingState = MutableLiveData<Boolean>()
+    val loadingViewState: LiveData<Boolean> = loadingState
 
-    fun start() {
+    private val errorState = MutableLiveData<Unit>()
+    val errorViewState: LiveData<Unit> = errorState
+
+    private val gameState = MutableLiveData<GameState>()
+    val gameStateView: LiveData<GameState> = gameState
+
+    private fun getNextWord() {
         if (wordManager.hasNext()) {
-            wordManager.nextWord()
+            wordState.value = wordManager.nextWord()
         } else {
             saveHighScore(currentScore)
+            gameState.value = GameState.GameOver
         }
     }
 
-    private fun getWords() {
+    fun getWords() {
         disposable.add(getWordsUseCase()
-            .flatMap {
+            .doOnSubscribe { loadingState.value = true }
+            .doOnComplete { loadingState.value = false }
+            .subscribe ({
                 wordManager.words = it.toMutableList()
-                wordManager.observable
-            }.subscribe {
-                wordState.value = it
+                gameState.value = GameState.Started
+                getNextWord()
+            }, {
+                errorState.value = Unit
             })
+        )
     }
 
     fun onCorrectClicked() {
@@ -55,8 +65,7 @@ class GameViewModel @Inject constructor(
             currentScore -= 10
         }
 
-        scoreState.value = currentScore.toString()
-        wordManager.nextWord()
+        publishScore()
     }
 
     fun onWrongClicked() {
@@ -66,7 +75,21 @@ class GameViewModel @Inject constructor(
             currentScore -= 10
         }
 
+        publishScore()
+    }
+
+    fun onNoAnswer() {
+        currentScore -= 10
+        publishScore()
+    }
+
+    private fun publishScore() {
         scoreState.value = currentScore.toString()
-        wordManager.nextWord()
+        getNextWord()
+    }
+
+    sealed class GameState {
+        object Started: GameState()
+        object GameOver: GameState()
     }
 }
